@@ -2,7 +2,7 @@
 <%@ page import="com.example.publicwifisearch.dto.WifiDTO" %>
 <%@ page import="com.example.publicwifisearch.dto.LocationDTO" %>
 <%@ page import="com.example.publicwifisearch.service.BookmarkGroupService" %>
-<%@ page import="com.example.publicwifisearch.domain.bookmark.BookmarkGroup" %>
+<%@ page import="com.example.publicwifisearch.domain.BookmarkGroup" %>
 <%@ page import="java.util.List" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>

@@ -1,25 +1,23 @@
-<%@ page import="com.example.publicwifisearch.service.HistoryService" %>
-<%@ page import="com.example.publicwifisearch.domain.History" %>
+<%@ page import="com.example.publicwifisearch.service.BookmarkService" %>
+<%@ page import="com.example.publicwifisearch.domain.Bookmark" %>
 <%@ page import="java.util.List" %>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
 
-    <link rel="stylesheet" type="text/css" href="/css/buttons.css">
     <link rel="stylesheet" type="text/css" href="/css/table_small.css">
+    <link rel="stylesheet" type="text/css" href="/css/buttons.css">
 
-    <script src="../js/confirm.js"></script>
+    <script src="../js/location.js"></script>
 
-    <title>위치 히스토리 목록</title>
 
+    <title>북마크 목록</title>
 </head>
 <body>
-<h1>위치 히스토리 목록</h1>
+<h1>북마크 목록</h1>
 <div class="button-container">
     <button class="button"
             onclick="location.href='../list.jsp'"
@@ -27,7 +25,7 @@
     </button>
 
     <button class="button"
-            onclick="location.href='history.jsp'"
+            onclick="location.href='../history/history.jsp'"
     >위치 히스토리 목록
     </button>
 
@@ -38,7 +36,7 @@
     </button>
 
     <button class="button"
-            onclick="location.href='../bookmark/bookmark-list.jsp'"
+            onclick="location.href='bookmark-list.jsp'"
     >북마크 보기
     </button>
 
@@ -48,43 +46,41 @@
     </button>
 </div>
 
-
 <%
-    HistoryService historyService = new HistoryService();
-    List<History> historyList = historyService.findLatest20Histories();
+    BookmarkService bookmarkService = new BookmarkService();
+    List<Bookmark> list = bookmarkService.findAll();
 %>
 
 <table>
     <thead>
     <tr>
         <th>ID</th>
-        <th>위도(LAT)</th>
-        <th>경도(LNT)</th>
-        <th>조회일자</th>
+        <th>북마크 이름</th>
+        <th>와이파이명</th>
+        <th>등록일자</th>
         <th>비고</th>
     </tr>
     </thead>
     <tbody>
     <%
-        for (History h : historyList) {
+        for (Bookmark b : list) {
     %>
     <tr>
-        <td><%=h.getId()%>
+        <td><%=b.getId()%>
         </td>
-        <td><%=h.getLat()%>
+        <td><%=b.getBookmarkGroupName()%>
         </td>
-        <td><%=h.getLnt()%>
+
+        <td>
+            <a href="javascript:void(0);" onclick="getLocationAndGoToDetail('<%=b.getWifiManageNumber()%>')">
+                <%=b.getWifiName()%>
+            </a>
         </td>
-        <td><%=h.getDateTime()%>
+        <td><%=b.getDateTime()%>
         </td>
         <td>
             <button class="button"
-                    onclick="location.href='../list.jsp?lat=<%=h.getLat()%>&lnt=<%=h.getLnt()%>'"
-                    style="background-color: lightblue"
-            >조회
-            </button>
-            <button class="button"
-                    onclick="confirmDelete('delete-history.jsp?id=<%=h.getId()%>');"
+                    onclick="location.href='bookmark-delete-page.jsp?id=<%=b.getId()%>'"
                     style="background-color: #f5c2c7"
             >삭제
             </button>
@@ -95,6 +91,5 @@
     %>
     </tbody>
 </table>
-
 </body>
 </html>
