@@ -22,11 +22,12 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 dependencies {
-    implementation('org.projectlombok:lombok')
-    implementation('com.squareup.okhttp3:okhttp')
-    implementation('com.google.code.gson:gson')
+    implementation('org.projectlombok:lombok:1.18.24')
+    implementation('com.squareup.okhttp3:okhttp:4.9.3')
+    implementation('com.google.code.gson:gson:2.9.0')
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.54'
     compileOnly('javax.servlet:javax.servlet-api:4.0.1')
-    runtimeOnly ('org.xerial:sqlite-jdbc')
+    runtimeOnly ('org.xerial:sqlite-jdbc:3.44.1.0')
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

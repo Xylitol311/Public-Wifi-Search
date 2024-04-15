@@ -1,28 +1,34 @@
+<%@ page import="java.util.List" %>
 <%@ page import="com.example.publicwifisearch.service.WifiService" %>
 <%@ page import="com.example.publicwifisearch.dto.WifiDTO" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.example.publicwifisearch.dto.LocationDTO" %>
-<%@ page import="java.util.ArrayList" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/table_main.css">
-    <link rel="stylesheet" type="text/css" href="/css/buttons.css">
     <meta charset="UTF-8">
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
 
+    <link rel="stylesheet" type="text/css" href="/css/table_main.css">
+    <link rel="stylesheet" type="text/css" href="/css/buttons.css">
+
     <script src="js/location.js"></script>
-    <title>Wifi Home</title>
+    <script src="js/loading.js"></script>
+
+    <title>와이파이 정보</title>
 </head>
 <body>
 <h1>와이파이 정보</h1>
+<%
+    WifiService wifiService = new WifiService();
+%>
+
 
 <div class="button-container">
     <button class="button"
-            onclick="location.href='index.jsp'"
+            onclick="location.href='list.jsp'"
     >Home
     </button>
 
@@ -41,21 +47,34 @@
             onclick="location.href='bookmark/bookmark-list.jsp'"
     >북마크 보기
     </button>
-
     <button class="button"
             onclick="location.href='bookmark-group/bookmark-group.jsp'"
     >북마크 그룹 관리
     </button>
 </div>
+<%
+    String lat = request.getParameter("lat");
+    String lnt = request.getParameter("lnt");
+    if (lat == null) {
+        lat = "0.0";
+    }
+    if (lnt == null) {
+        lnt = "0.0";
+    }
+
+    List<WifiDTO> top20Wifi = wifiService.findWifisByLoc(new LocationDTO(lat, lnt));
+%>
 <div>
     <form method="get" action="history/save-history.jsp">
-        LAT: <input type="text" id="lat" name="lat" value="0.0"/>
+        LAT: <input type="text" id="lat" name="lat" value="<%=lat%>">
         <label for="lat"></label>
 
-        LNT: <input type="text" id="lnt" name="lnt" value="0.0"/>
+        LNT: <input type="text" id="lnt" name="lnt" value="<%=lnt%>"/>
         <label for="lnt"></label>
 
-        <button type="button" class="button" onclick="getLocation()">내 위치 불러오기</button>
+        <button type="button" class="button" onclick="getLocation()"
+        >내 위치 불러오기
+        </button>
         <button type="submit" class="button"
                 style="background-color: lightblue"
         >근처 WIFI 정보 보기
@@ -86,10 +105,53 @@
         <th>작업일자</th>
     </tr>
     </thead>
+    <tbody>
+    <%
+        for (WifiDTO wi : top20Wifi) {
+    %>
     <tr>
-        <td colspan="17">위치 정보를 입력한 후에 조회해 주세요.</td>
+        <td><%=wi.getDistance()%>
+        </td>
+        <td><%=wi.getManageNumber()%>
+        </td>
+        <td><%=wi.getDistrict()%>
+        </td>
+        <td>
+            <a href="wifi/detail.jsp?key=<%=wi.getManageNumber()%>&lat=<%=lat%>&lnt=<%=lnt%>">
+                <%=wi.getName()%>
+            </a>
+        </td>
+        <td><%=wi.getAddr1()%>
+        </td>
+        <td><%=wi.getAddr2()%>
+        </td>
+        <td><%=wi.getInstallFloor()%>
+        </td>
+        <td><%=wi.getInstallType()%>
+        </td>
+        <td><%=wi.getInstallCorp()%>
+        </td>
+        <td><%=wi.getServiceType()%>
+        </td>
+        <td><%=wi.getNetworkType()%>
+        </td>
+        <td><%=wi.getInstallYear()%>
+        </td>
+        <td><%=wi.getInOrOutDoor()%>
+        </td>
+        <td><%=wi.getWifiAccessEnv()%>
+        </td>
+        <td><%=wi.getLat()%>
+        </td>
+        <td><%=wi.getLnt()%>
+        </td>
+        <td><%=wi.getWorkDateTime()%>
+        </td>
     </tr>
-
+    <%
+        }
+    %>
+    </tbody>
 </table>
 
 
